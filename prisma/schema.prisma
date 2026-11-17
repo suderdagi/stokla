@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Every business that signs up gets its own organization. All data belongs to one
+/// organization, and every query is filtered by organizationId (multi-tenancy).
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  users     User[]
+  products  Product[]
+  suppliers Supplier[]
+  movements StockMovement[]
+}
+
+enum Role {
+  OWNER
+  STAFF
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String
+  passwordHash   String
+  role           Role     @default(OWNER)
+  organizationId String
+  createdAt      DateTime @default(now())
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+  movements    StockMovement[]
+
+  @@index([organizationId])
+}
+
+/// Only a SHA-256 hash of the session token is stored; the token itself lives in an httpOnly cookie.
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Supplier {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  email          String?
+  phone          String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  products     Product[]
+
+  @@unique([organizationId, name])
+}
+
+enum Unit {
+  PIECE
+  KG
+  LITER
+  BOX
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  organizationId String
+  sku            String
+  name           String
+  unit           Unit     @default(PIECE)
+  costPrice      Decimal  @db.Decimal(12, 2)
+  salePrice      Decimal  @db.Decimal(12, 2)
+  /// Current stock. Only changed through stock movements, never edited directly.
+  quantity       Int      @default(0)
+  /// Below this amount the product shows up as "low stock"
+  minQuantity    Int      @default(0)
+  supplierId     String?
+  archived       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  supplier     Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  movements    StockMovement[]
+
+  @@unique([organizationId, sku])
+  @@index([organizationId, archived])
+}
+
+enum MovementType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+/// Append-only log of every stock change. Product.quantity always equals the sum of these changes.
+model StockMovement {
+  id             String       @id @default(cuid())
+  organizationId String
+  productId      String
+  userId         String?
+  type           MovementType
+  /// Signed change: +10 for receiving goods, -3 for a sale
+  change         Int
+  /// Stock level right after this movement, so history can be read without recalculating
+  quantityAfter  Int
+  note           String?
+  createdAt      DateTime     @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([productId, createdAt])
+}
