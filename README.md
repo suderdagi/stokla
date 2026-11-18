@@ -1,6 +1,6 @@
 # Stokla
 
-Inventory management for small businesses. A shop owner signs up, adds products and suppliers, and records every item that comes in or goes out. Stokla keeps the stock levels, shows what the stock is worth and warns before best sellers run out.
+Inventory management for small businesses. A shop owner signs up, adds products and suppliers, and records every item that comes in or goes out. Stokla keeps the stock levels, shows what the stock is worth and lists the products that have fallen to their minimum level.
 
 **Live demo:** https://stokla-sage.vercel.app (sign in with `demo@stokla.dev` / `demo1234`)
 
@@ -36,7 +36,7 @@ Every table (products, suppliers, movements) has an `organizationId`. Pages and 
 
 ### Stock that never goes negative
 
-Product quantities are only changed by `recordMovement()` in [`src/lib/stock.ts`](src/lib/stock.ts), inside a transaction that also writes the movement log. Selling uses a single conditional update:
+Product quantities are only changed by `recordMovement()` in [`src/lib/stock.ts`](src/lib/stock.ts), inside a transaction that also writes the movement log. Selling uses a single conditional update (simplified here; the real code is `recordMovement`):
 
 ```ts
 await tx.product.updateMany({
@@ -98,7 +98,7 @@ Tests run against a separate database (`TEST_DATABASE_URL`, default `stokla_test
 
 ## Deploying
 
-The app runs on any Node.js host. On Vercel: create a PostgreSQL database (Neon, Supabase or Vercel Postgres), set `DATABASE_URL`, and use `prisma migrate deploy && next build` as the build command.
+The app runs on any Node.js host. On Vercel: create a PostgreSQL database (Neon, Supabase or Vercel Postgres) and set `DATABASE_URL`. Vercel runs the `vercel-build` script from `package.json`: it generates the Prisma client, applies the migrations, seeds the demo business (skipped if it already exists) and builds the app. Every deployment, previews included, runs `prisma migrate deploy` against the database in `DATABASE_URL`.
 
 ## Possible next steps
 
