@@ -55,14 +55,14 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
               defaultValue={q}
               placeholder="Search name or SKU"
               aria-label="Search products"
-              className="w-full rounded-lg border border-stone-300 py-2 pl-9 pr-3 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-9 pr-3 text-base md:text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
           <select
             name="filter"
             defaultValue={filter ?? ''}
             aria-label="Stock filter"
-            className="rounded-lg border border-stone-300 px-3 py-2 text-sm"
+            className="rounded-lg border border-stone-300 px-3 py-2 text-base md:text-sm"
           >
             <option value="">All products</option>
             <option value="low">Low stock only</option>

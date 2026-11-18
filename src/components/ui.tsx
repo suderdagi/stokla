@@ -21,7 +21,7 @@ export function SubmitButton({
 }
 
 const controlClass =
-  'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 aria-[invalid=true]:border-red-400'
+  'w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base shadow-sm md:text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 aria-[invalid=true]:border-red-400'
 
 interface FieldProps {
   label: string
