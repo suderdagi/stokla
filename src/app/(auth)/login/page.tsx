@@ -25,7 +25,7 @@ export default function LoginPage() {
           Create an account
         </Link>
       </p>
-      <p className="mt-2 text-center text-xs text-stone-400">Demo: demo@stokla.dev / demo1234</p>
+      <p className="mt-2 text-center text-xs text-stone-500">Demo: demo@stokla.dev / demo1234</p>
     </>
   )
 }
