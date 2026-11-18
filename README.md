@@ -2,6 +2,8 @@
 
 Inventory management for small businesses. A shop owner signs up, adds products and suppliers, and records every item that comes in or goes out. Stokla keeps the stock levels, shows what the stock is worth and warns before best sellers run out.
 
+**Live demo:** https://stokla-sage.vercel.app (sign in with `demo@stokla.dev` / `demo1234`)
+
 ![Dashboard](docs/dashboard.png)
 
 ## Features
