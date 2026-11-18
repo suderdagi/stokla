@@ -73,11 +73,15 @@ async function main() {
 
     // Opening stock 30 days ago, then daily sales and a few deliveries
     let quantity = 0
+    let lastAt = 0
     const movements: { type: MovementType; change: number; quantityAfter: number; note?: string; createdAt: Date }[] = []
     const add = (type: MovementType, change: number, daysAgo: number, note?: string) => {
       if (quantity + change < 0) return
       quantity += change
-      movements.push({ type, change, quantityAfter: quantity, note, createdAt: new Date(now - daysAgo * DAY - int(1, 10) * 3_600_000) })
+      // A movement can never be older than the one before it, otherwise "stock after" would not add up when listed by time
+      const at = Math.max(now - daysAgo * DAY - int(1, 10) * 3_600_000, lastAt + 60_000)
+      lastAt = at
+      movements.push({ type, change, quantityAfter: quantity, note, createdAt: new Date(at) })
     }
 
     add('IN', int(min * 2, min * 5), 30, 'Opening stock')
