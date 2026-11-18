@@ -94,7 +94,7 @@ npm run dev                   # http://localhost:3000
 npm test
 ```
 
-Tests run against a separate database (`TEST_DATABASE_URL`, default `stokla_test`): stock movements, concurrency, stock counts, organization isolation, dashboard numbers and form validation.
+Tests run against a separate database (`TEST_DATABASE_URL`, default `stokla_test`): stock movements, concurrency, stock counts, organization isolation, dashboard numbers and form validation. Because the tests delete all data, they refuse to start unless the database name contains `test`.
 
 ## Deploying
 
