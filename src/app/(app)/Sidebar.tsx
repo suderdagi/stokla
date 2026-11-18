@@ -25,6 +25,12 @@ export function Sidebar({ userName, organizationName }: { userName: string; orga
           <p className="font-bold leading-tight tracking-tight">Stokla</p>
           <p className="truncate text-xs text-stone-500">{organizationName}</p>
         </div>
+        {/* The footer below is desktop-only, so on phones sign-out lives in the header */}
+        <form action={logout} className="ml-auto md:hidden">
+          <button className="rounded p-2.5 text-stone-500 hover:bg-stone-100" aria-label="Sign out">
+            <LogOut size={18} />
+          </button>
+        </form>
       </div>
 
       <nav className="flex w-full min-w-0 gap-1 overflow-x-auto px-3 pb-3 md:flex-1 md:flex-col md:pb-0" aria-label="Main">
