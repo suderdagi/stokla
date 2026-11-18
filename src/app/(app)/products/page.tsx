@@ -30,7 +30,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
     include: { supplier: { select: { name: true } } },
     orderBy: { name: 'asc' },
   })
-  // Comparing two columns (quantity <= minQuantity) isn't expressible in Prisma's where, so filter here
+  // Low stock (quantity <= minQuantity) is filtered here, so the header count still covers every product matching the search
   const products = filter === 'low' ? all.filter(isLowStock) : all
 
   return (
