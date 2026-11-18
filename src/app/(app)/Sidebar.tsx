@@ -18,7 +18,7 @@ export function Sidebar({ userName, organizationName }: { userName: string; orga
   const pathname = usePathname()
 
   return (
-    <aside className="border-b border-stone-200 bg-white md:flex md:min-h-screen md:w-60 md:flex-col md:border-b-0 md:border-r">
+    <aside className="min-w-0 border-b border-stone-200 bg-white md:flex md:min-h-screen md:w-60 md:flex-col md:border-b-0 md:border-r">
       <div className="flex items-center gap-2 px-5 py-4">
         <Logo />
         <div className="min-w-0">
@@ -27,7 +27,7 @@ export function Sidebar({ userName, organizationName }: { userName: string; orga
         </div>
       </div>
 
-      <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-1 md:flex-col md:pb-0" aria-label="Main">
+      <nav className="flex w-full min-w-0 gap-1 overflow-x-auto px-3 pb-3 md:flex-1 md:flex-col md:pb-0" aria-label="Main">
         {NAV.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`)
           return (

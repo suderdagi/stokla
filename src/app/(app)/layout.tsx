@@ -5,7 +5,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const user = await requireUser()
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row">
+    <div className="flex min-h-screen w-full max-w-[100vw] flex-col overflow-x-hidden md:flex-row">
       <Sidebar userName={user.name} organizationName={user.organization.name} />
       <main className="min-w-0 flex-1 p-4 sm:p-8">{children}</main>
     </div>
